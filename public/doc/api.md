@@ -64,9 +64,9 @@ extData object
    createTime string
 ```
 
-> [内测服](http://192.168.191.94:8077) -> [正式服](http://ywweb.duoyi.com)
+> [内测服](http://192.168.191.94:8077/) -> [正式服](http://ywweb.duoyi.com/)
 
-> [内测服](http://192.168.191.94:8029) -> [正式服](http://ywweb.duoyi.com:8029)
+> [内测服](http://192.168.191.94:8029/) -> [正式服](http://ywweb.duoyi.com:8029/)
 
 > [内网接口地址](http://192.168.191.94:8077/mobile/feedback/api/problem)
 
