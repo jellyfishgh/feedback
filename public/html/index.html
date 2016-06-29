@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>意见反馈</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- 如果服务器设置了缓存相关的header，则注释掉这个meta -->
+    <meta http-equiv="Cache-Control" content="max-age=2592000">
+    <link rel="stylesheet" type="text/css" href="/static/css/fd.css">
+</head>
+
+<body>
+    <div class='myFeedsPage' id='myFeedsPage'>
+        <div class='postFeedItem' id='postFeedItem'></div>
+        <div class='myFeeds'>
+            <div>我的问题</div>
+            <ul id='myFeedsPanel'>
+        </div>
+    </div>
+    <div class='postFeedPage' id='postFeedPage'>
+        <textarea name="" id="" cols="30" rows="10" placeholder="你的宝贵意见，是我们前进的动力。"></textarea>
+        <label for="isHasedLog"><checkbox id='isHasedLog' checked>是否上传日志</checkbox></label>
+        <p class='picTitle'>提供图片以协助我们解决问题</p>
+        <p id='picLimit'>0/2</p>
+        <file><img src='' /></file>
+        <button>完成</button>
+    </div>
+    <div class='feedDetailsPage' id='feedDetailsPage'>
+        <ul class="feedDetails" id="feedDetails"></ul>
+        <input type="text">
+        <button>发送</button>
+    </div>
+    <script src='/static/lib/js/zepto.min.js'></script>
+    <script src='/static/js/fd.js'></script>
+    <script>
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "feedback",
+  "version": "1.0.0",
+  "description": "feedback",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jellyfishgh/feedback.git"
+  },
+  "keywords": [
+    "frontend",
+    "rending"
+  ],
+  "author": "jelyfishgh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jellyfishgh/feedback/issues"
+  },
+  "homepage": "https://github.com/jellyfishgh/feedback#readme",
+  "dependencies": {
+    "mime": "^1.3.4"
+  }
+}
