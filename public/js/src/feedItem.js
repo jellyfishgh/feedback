@@ -1,4 +1,4 @@
-class Feed {
+class FeedItem {
     constructor($, feed, tapHandler) {
         this.$ = $;
         this.feed = feed;
@@ -34,4 +34,4 @@ class Feed {
     }
 }
 
-export default Feed;
+export default FeedItem;

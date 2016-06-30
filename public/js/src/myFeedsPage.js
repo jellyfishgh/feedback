@@ -1,7 +1,5 @@
-import MyFeeds from './myFeedsPanel';
-import {
-    getMyFeeds
-} from './tool';
+import MyFeedsPanel from './MyFeedsPanel';
+import { getMyFeeds } from './tool';
 
 class MyFeedsPage {
     constructor(postFeedHandler, feedDetailHandler) {
@@ -22,9 +20,7 @@ class MyFeedsPage {
             }).append($('<div>', {
                 text: '我的问题',
                 className: 'banner'
-            })).append($('<ul>', {
-                id: 'myFeeds'
-            })));
+            })).append();
     }
 }
 

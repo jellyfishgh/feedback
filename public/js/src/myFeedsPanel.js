@@ -1,6 +1,6 @@
-import Feed from './feedItem';
+import FeedItem from './FeedItem';
 
-class MyFeeds {
+class MyFeedsPanel {
     constructor($, feeds) {
         this.$ = $;
         this.feeds = feeds;
@@ -10,7 +10,7 @@ class MyFeeds {
             id: 'myFeedsPanel'
         });
         feeds.map((feed) => {
-            myFeedsPanel.append(new Feed(this.$, this.feedTapHandler, feed).render());
+            myFeedsPanel.append(new FeedItem(this.$, this.feedTapHandler, feed).render());
             return feed;
         });
         return myFeedsPanel;
@@ -20,4 +20,4 @@ class MyFeeds {
     }
 }
 
-export default MyFeeds;
+export default MyFeedsPanel;
