@@ -8,7 +8,7 @@ PostFeedPage.prototype.render = function() {
     return $("<div>", {
             id: "postFeed",
             className: "postFeed"
-        }).appednd($("<textarea>", {
+        }).append($("<textarea>", {
             name: "feedContent",
             id: "feedContent",
             className: "feedContent",

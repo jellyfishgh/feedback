@@ -12,3 +12,10 @@ li {
 .feedsDetailPage {
     display: none;
 }
+
+
+.picsView{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

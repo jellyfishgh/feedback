@@ -268,7 +268,7 @@ extData object
       createTime string时间
    answers array
       feedbackid number问题id
-      type number1客服回复2玩家回复
+      type number 1客服回复2玩家回复
 ```
 
 [内网接口地址](http://192.168.191.94:8077/mobile/feedback/api/problemdetail)

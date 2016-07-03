@@ -1,24 +1,31 @@
 var util = require('./util');
 var $ = util.$;
-var MsgContentView = require('./MsgContentView');
 
-function MsgItem(uid, msg) {
-    this.uid = uid;
-    this.type = msg.type;
-    this.picurl = msg.picurl;
-    this.createTime = msg.createTime;
-    this.content = msg.content;
+function MsgItem(msgType, msgTextContent, msgPicUrls) {
+    this.type = msgType;
+    this.textContent = msgTextContent;
+    this.picUrls = msgPicUrls;
+    
 }
 
 MsgItem.prototype.render = function() {
-    return $("<li>", {
-
+    var msgConetentview = $("<div>", {
+        className: "msgConetent"
     }).append($("<p>", {
-        text: this.createTime
-    })).append(new MsgContentView(this.content, this.picurl.split(',')).render())
-    .append($("<img>"), {
-        src: util.getHead(this.uid)
+        text: this.textContent
+    }));
+    var picsView = $("<div>", {
+        className: "picsView"
     });
+    this.picUrls.map(function(picUrl) {
+        picsView.append($("<img>", {
+            src: picUrl
+        }));
+    });
+    msgConetentview.append(picsView);
+    return $("<li>", {
+        className: this.type === 1 ? 'left' : 'right'
+    }).append(msgConetentview);
 };
 
 module.exports = MsgItem;
