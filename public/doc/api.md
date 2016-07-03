@@ -134,7 +134,7 @@ extData array
    devName string设备
    sysVersion string系统信息
    appVersion stringAPP版本
-   platform number平台　1ios2android
+   platform number平台　1 ios 2 android
    createTime string时间
 ```
 

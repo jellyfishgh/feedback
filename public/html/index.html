@@ -10,27 +10,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- 如果服务器设置了缓存相关的header，则注释掉这个meta -->
     <meta http-equiv="Cache-Control" content="max-age=2592000">
-    <link rel="stylesheet" type="text/css" href="/static/css/fd.css">
+    <link rel="stylesheet" type="text/css" href="/lib/webuploader.css">
+    <link rel="stylesheet" type="text/css" href="/css/fb.css">
 </head>
 
 <body>
-    <div class='postFeedPage' id='postFeedPage'>
-        <textarea name="" id="" cols="30" rows="10" placeholder="你的宝贵意见，是我们前进的动力。"></textarea>
-        <label for="isHasedLog"><checkbox id='isHasedLog' checked>是否上传日志</checkbox></label>
-        <p class='picTitle'>提供图片以协助我们解决问题</p>
-        <p id='picLimit'>0/2</p>
-        <file><img src='' /></file>
-        <button>完成</button>
-    </div>
-    <div class='feedDetailsPage' id='feedDetailsPage'>
-        <ul class="feedDetails" id="feedDetails"></ul>
-        <input type="text">
-        <button>发送</button>
-    </div>
-    <script src='/static/lib/js/zepto.min.js'></script>
-    <script src='/static/js/fd.js'></script>
-    <script>
-    </script>
+    <script src='/lib/zepto.min.js'></script>
+    <script src='/lib/webuploader.html5only.min.js'></script>
+    <script src='/js/dist/bundle.min.js'></script>
 </body>
 
 </html>
