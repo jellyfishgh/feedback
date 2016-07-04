@@ -17,10 +17,10 @@ var week = ["日", "一", "二", "三", "四", "五", "六"];
 
 module.exports = {
     $: window.Zepto,
-    fetchMyFeeds: function (host, uid, resolve, reject, finish) {
+    fetchMyFeeds: function (uid, resolve, reject, finish) {
         this.$.ajax({
             type: 'GET',
-            url: host + 'mobile/feedback/api/myproblems',
+            url: 'mobile/feedback/api/myproblems',
             data: {
                 uid: uid
             },
@@ -37,10 +37,10 @@ module.exports = {
             }
         });
     },
-    postFeed: function (host, data, resolve, reject, finish) {
+    postFeed: function (data, resolve, reject, finish) {
         this.$.ajax({
             type: 'POST',
-            url: host + 'mobile/feedback/api/problem',
+            url: 'mobile/feedback/api/problem',
             data: data,
             contentType: 'application/json',
             timeout: 2000,
@@ -54,6 +54,12 @@ module.exports = {
                 finish();
             }
         });
+    },
+    fetchAnswers: function(){
+
+    },
+    postAnswer: function(){
+
     },
     format: function (dateLocalStr) {
         var date = new Date(dateLocalStr);

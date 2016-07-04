@@ -1,4 +1,5 @@
 var util = require('./util');
+var $ = util.$;
 var MyFeedsPage = require('./MyFeedsPage');
 
 /*
@@ -13,5 +14,13 @@ var MyFeedsPage = require('./MyFeedsPage');
 */
 var searchObj = util.parse(location.search.slice(1));
 
-var feedsPage = new MyFeedsPage();
+var feedsPage = new MyFeedsPage(searchObj.uid, function(){
+    feedsPage.hide();
+    $(document).append(new PostFeedPage(searchObj).render());
+}, function(feedid){
+    feedsPage.hide();
+    $(document).append(new ChatPage(feedid).render());
+});
+
+$(document).append(feedsPage.render());
 

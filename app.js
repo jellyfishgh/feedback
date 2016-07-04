@@ -13,25 +13,49 @@ const apiHost = 'http://ywweb.duoyi.com/';
 const routes = {
     'mobile/feedback/api/problem': {
         method: 'POST',
-        handler: function(req, res) {
-            var body = [];
-            request.on('data', function(chunk) {
-                body.push(chunk);
-            }).on('end', function() {
-                body = Buffer.concat(body).toString();
-                request.post({
-                    url: `${apiHost}mobile/feedback/api/problem`,
-                    form: querystring.parse(body)
-                }, function(err, httpResponse, body) {
-                    res.end(body);
-                });
-            });
-        }
+        handler: createPostHandler()
     },
-    'mobile/feedback/api/answer': 'POST',
-    'mobile/feedback/api/myproblems': 'GET',
-    'mobile/feedback/api/problemdetail': 'GET'
+    'mobile/feedback/api/answer': {
+        method: 'POST',
+        handler: createPostHandler()
+    },
+    'mobile/feedback/api/myproblems': {
+        method: 'GET',
+        handler: createGetHandler()
+    },
+    'mobile/feedback/api/problemdetail': {
+        method: 'GET',
+        handler: createGetHandler()
+    }
 };
+
+function createPostHandler() {
+    return function (api, req, res) {
+        var body = [];
+        request.on('data', function (chunk) {
+            body.push(chunk);
+        }).on('end', function () {
+            body = Buffer.concat(body).toString();
+            request.post({
+                url: api,
+                form: querystring.parse(body)
+            }, function (err, httpResponse, body) {
+                res.end(body);
+            });
+        });
+    }
+}
+
+function createGetHandler() {
+    return function (api, req, res) {
+        const search = url.parse(req.url).search;
+        request(`${api}${search}`, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                res.end(body);
+            }
+        });
+    }
+}
 
 const server = http.createServer((req, res) => {
     const urlObject = url.parse(req.url);
@@ -39,7 +63,7 @@ const server = http.createServer((req, res) => {
     console.log(pathname);
     if (routes[pathname]) {
         if (req.method === routes[pathname].method) {
-            routes[pathname].handler(req, res);
+            routes[pathname].handler(`${apiHost}${pathname}`, req, res);
         }
     } else {
         const file = path.join('public', path.normalize(pathname.replace(/\.\./g, '')));
@@ -92,11 +116,3 @@ function errHandler(res, code, msg) {
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
-
-
-// var request = require('request');
-// request('http://www.google.com', function(error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//         console.log(body)
-//     }
-// });

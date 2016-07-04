@@ -29,7 +29,7 @@ MyFeedItem.prtotype.render = function() {
             className: 'feedAnswerNum',
         }))
         .on('tap', function() {
-            console.log("Tap" + this.feed.id);
+            this.tapHandler(this.feed.id);
         });
 };
 

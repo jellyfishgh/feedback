@@ -1,8 +1,9 @@
 var MyFeedItem = require('./MyFeedItem');
 var $ = require('./util').$;
 
-function MyFeedsList(feeds) {
+function MyFeedsList(feeds, myFeedTapHandler) {
     this.feeds = feeds;
+    this.myFeedTapHandler = myFeedTapHandler;
 }
 
 MyFeedsList.prototype.render = function() {
@@ -10,7 +11,7 @@ MyFeedsList.prototype.render = function() {
         id: 'myFeedsList'
     });
     this.feeds.map(function(feed) {
-        myFeedsList.append(new MyFeedItem(feed).render());
+        myFeedsList.append(new MyFeedItem(feed, this.myFeedTapHandler).render());
     });
     return myFeedsList;
 };
