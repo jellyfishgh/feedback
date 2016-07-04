@@ -13,7 +13,7 @@ function prefix(num) {
     return num < 10 ? '0' + num : num;
 }
 
-var week = ["日", "一", "二", "三", "四", "五", "六"]
+var week = ["日", "一", "二", "三", "四", "五", "六"];
 
 module.exports = {
     $: window.Zepto,
@@ -37,6 +37,24 @@ module.exports = {
             }
         });
     },
+    postFeed: function (host, data, resolve, reject, finish) {
+        this.$.ajax({
+            type: 'POST',
+            url: host + 'mobile/feedback/api/problem',
+            data: data,
+            contentType: 'application/json',
+            timeout: 2000,
+            success: function (feed) {
+                resolve(feed);
+            },
+            error: function (xhr, errorType, error) {
+                reject(error);
+            },
+            complete: function () {
+                finish();
+            }
+        });
+    },
     format: function (dateLocalStr) {
         var date = new Date(dateLocalStr);
         var now = new Date();
@@ -49,7 +67,7 @@ module.exports = {
                         return '昨天 ' + formateTime(date);
                     } else {
                         if (now.getDate() - date.getDate() < 7) {
-                            return week[now.getDay()] + ' ' + formateTime(date);
+                            return '星期' + week[now.getDay()] + ' ' + formateTime(date);
                         } else {
                             return formateDT(date);
                         }
@@ -64,5 +82,14 @@ module.exports = {
     },
     trim: function (str) {
         return str.replace(/^\s+|\s+$/g, '');
+    },
+    parse: function (search) {
+        var queries = search.split("&");
+        var json = {};
+        for (var i = 0; i < queries.length; i++) {
+            var kv = queries[i].split("=");
+            json[kv[0]] = kv[1];
+        }
+        return json;
     }
 };
