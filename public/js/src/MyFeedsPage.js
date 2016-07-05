@@ -16,7 +16,7 @@ MyFeedsPage.prototype = {
             text: '意见反馈',
             className: 'postFeedItem',
             id: 'postFeedItem'
-        }).on(tap, this.postItemTapHandler)).append(this.init());
+        }).on('tap', this.postItemTapHandler)).append(this.init());
     },
     init: function () {
         var myFeedsListView = $('<div>', {

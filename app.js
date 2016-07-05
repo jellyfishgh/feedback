@@ -11,19 +11,19 @@ const hostname = '127.0.0.1';
 const port = 3000;
 const apiHost = 'http://ywweb.duoyi.com/';
 const routes = {
-    'mobile/feedback/api/problem': {
+    '/mobile/feedback/api/problem': {
         method: 'POST',
         handler: createPostHandler()
     },
-    'mobile/feedback/api/answer': {
+    '/mobile/feedback/api/answer': {
         method: 'POST',
         handler: createPostHandler()
     },
-    'mobile/feedback/api/myproblems': {
+    '/mobile/feedback/api/myproblems': {
         method: 'GET',
         handler: createGetHandler()
     },
-    'mobile/feedback/api/problemdetail': {
+    '/mobile/feedback/api/problemdetail': {
         method: 'GET',
         handler: createGetHandler()
     }
@@ -36,10 +36,12 @@ function createPostHandler() {
             body.push(chunk);
         }).on('end', function () {
             body = Buffer.concat(body).toString();
+            console.log(body);
             request.post({
                 url: api,
                 form: querystring.parse(body)
             }, function (err, httpResponse, body) {
+                console.log(body);
                 res.end(body);
             });
         });
@@ -59,7 +61,7 @@ function createGetHandler() {
 
 const server = http.createServer((req, res) => {
     const urlObject = url.parse(req.url);
-    const pathname = urlObject.path === '/' ? 'index.html' : urlObject.pathname;
+    const pathname = urlObject.path === '/' ? 'html/index.html' : urlObject.pathname;
     console.log(pathname);
     if (routes[pathname]) {
         if (req.method === routes[pathname].method) {

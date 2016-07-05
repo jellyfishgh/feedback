@@ -5,7 +5,7 @@ function MyFeedItem(feed, tapHandler) {
     this.tapHandler = tapHandler;
 }
 
-MyFeedItem.prtotype.render = function() {
+MyFeedItem.prototype.render = function() {
     return $('<li>', {
             id: 'feedItem' + this.feed.id,
             className: 'feedItem',
