@@ -2,6 +2,7 @@ var util = require('./util');
 var $ = util.$;
 var MyFeedsPage = require('./MyFeedsPage');
 var PostFeedPage = require('./PostFeedPage');
+var ChatPage = require('./ChatPage');
 
 /*
     {

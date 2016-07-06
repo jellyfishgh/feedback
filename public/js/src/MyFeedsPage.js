@@ -38,7 +38,7 @@ MyFeedsPage.prototype = {
                     text: "你还没有提交过反馈。"
                 }));
             }
-        }, function () {
+        }.bind(this), function () {
             myFeedsListView.append(util.createErrorView());
         }, function () {
             loadingView.hide();

@@ -12,7 +12,7 @@ MyFeedsList.prototype.render = function() {
     });
     this.feeds.map(function(feed) {
         myFeedsList.append(new MyFeedItem(feed, this.myFeedTapHandler).render());
-    });
+    }.bind(this));
     return myFeedsList;
 };
 

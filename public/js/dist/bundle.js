@@ -1,6 +1,115 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var util = require('./util');
 var $ = util.$;
+var MsgsList = require('./MsgsList');
+
+function ChatPage(sign, uid, feedid) {
+    this.sign = sign;
+    this.uid = uid;
+    this.feedid = feedid;
+    return this.render();
+}
+
+ChatPage.prototype.render = function() {
+    var loadingView = util.createLoadingView();
+    var chatPage = $("<div>", {
+        className: "chatPage"
+    }).append(loadingView);
+    util.fetchAnswers(this.feedid, function(answers) {
+        if (answers.length > 0) {
+            chatPage.append(new MsgsList(answers)).append($("<div>", {
+                className: "inputArea"
+            }).append($("<input>", {
+                type: "text",
+                placeholder: "可以继续描述你的问题",
+                className: "answerInput",
+                id: "answerInput"
+            })).append($("<button>", {
+                text: "发送",
+                className: "sendAnswer"
+            })).on('tap', function() {
+
+            }));
+        } else {
+            chatPage.append($("<div>", {
+                className: "center info",
+                text: "客服暂时还没有回复你"
+            }));
+        }
+    }, function() {
+        chatPage.append(util.createErrorView());
+    }, function() {
+        loadingView.hide();
+    });
+    return chatPage;
+};
+
+module.exports = ChatPage;
+},{"./MsgsList":3,"./util":9}],2:[function(require,module,exports){
+var util = require('./util');
+var $ = util.$;
+
+function MsgItem(msgType, msgTextContent, msgPicUrls) {
+    this.type = msgType;
+    this.textContent = msgTextContent;
+    this.picUrls = msgPicUrls;
+    
+}
+
+MsgItem.prototype.render = function() {
+    var msgConetentview = $("<div>", {
+        className: "msgConetent"
+    }).append($("<p>", {
+        text: this.textContent
+    }));
+    var picsView = $("<div>", {
+        className: "picsView"
+    });
+    this.picUrls.map(function(picUrl) {
+        picsView.append($("<img>", {
+            src: picUrl
+        }));
+    });
+    msgConetentview.append(picsView);
+    return $("<li>", {
+        className: this.type === 1 ? 'left' : 'right'
+    }).append(msgConetentview);
+};
+
+module.exports = MsgItem;
+},{"./util":9}],3:[function(require,module,exports){
+var util = require('./util');
+var $ = util.$;
+var MsgItem = require('./MsgItem');
+
+function MsgsList(answers) {
+    this.answers = answers;
+    return this.render();
+}
+
+MsgsList.prototype.render = function () {
+    var msgsList = $("<ul>", {
+        className: "msgsList"
+    });
+    var currentChatDate = new Date(this.answers[0].createTime);
+    this.answers.map(function (msg) {
+        var msgDate = new Date(msg.createTime);
+        if (msgDate - currentChatDate >= 6000) {
+            currentChatDate = msgDate;
+            msgsList.append($("<li>", {
+                className: "chatDate",
+                text: util.format(currentChatDate)
+            }));
+        }
+        msgsList.append(new MsgItem(msg.type, msg.content, msg.picurl.split(',')));
+    });
+    return msgsList;
+};
+
+module.exports = MsgsList;
+},{"./MsgItem":2,"./util":9}],4:[function(require,module,exports){
+var util = require('./util');
+var $ = util.$;
 
 function MyFeedItem(feed, tapHandler) {
     this.feed = feed;
@@ -36,7 +145,7 @@ MyFeedItem.prototype.render = function() {
 };
 
 module.exports = MyFeedItem;
-},{"./util":6}],2:[function(require,module,exports){
+},{"./util":9}],5:[function(require,module,exports){
 var MyFeedItem = require('./MyFeedItem');
 var $ = require('./util').$;
 
@@ -51,12 +160,12 @@ MyFeedsList.prototype.render = function() {
     });
     this.feeds.map(function(feed) {
         myFeedsList.append(new MyFeedItem(feed, this.myFeedTapHandler).render());
-    });
+    }.bind(this));
     return myFeedsList;
 };
 
 module.exports = MyFeedsList;
-},{"./MyFeedItem":1,"./util":6}],3:[function(require,module,exports){
+},{"./MyFeedItem":4,"./util":9}],6:[function(require,module,exports){
 var MyFeedsList = require('./MyFeedsList');
 var util = require('./util');
 
@@ -97,7 +206,7 @@ MyFeedsPage.prototype = {
                     text: "你还没有提交过反馈。"
                 }));
             }
-        }, function () {
+        }.bind(this), function () {
             myFeedsListView.append(util.createErrorView());
         }, function () {
             loadingView.hide();
@@ -107,7 +216,7 @@ MyFeedsPage.prototype = {
 };
 
 module.exports = MyFeedsPage;
-},{"./MyFeedsList":2,"./util":6}],4:[function(require,module,exports){
+},{"./MyFeedsList":5,"./util":9}],7:[function(require,module,exports){
 var $ = require('./util').$;
 
 function PostFeedPage(searchObj) {
@@ -160,11 +269,12 @@ PostFeedPage.prototype.render = function() {
 };
 
 module.exports = PostFeedPage;
-},{"./util":6}],5:[function(require,module,exports){
+},{"./util":9}],8:[function(require,module,exports){
 var util = require('./util');
 var $ = util.$;
 var MyFeedsPage = require('./MyFeedsPage');
 var PostFeedPage = require('./PostFeedPage');
+var ChatPage = require('./ChatPage');
 
 /*
     {
@@ -191,7 +301,7 @@ var feedsPage = new MyFeedsPage(searchObj.uid, function() {
 });
 
 $(document.body).append(feedsPage);
-},{"./MyFeedsPage":3,"./PostFeedPage":4,"./util":6}],6:[function(require,module,exports){
+},{"./ChatPage":1,"./MyFeedsPage":6,"./PostFeedPage":7,"./util":9}],9:[function(require,module,exports){
 function formateDT(date) {
     return formateDate(date) + " " + formateTime(date);
 }
@@ -342,4 +452,4 @@ module.exports = {
         })
     }
 };
-},{}]},{},[5]);
+},{}]},{},[8]);

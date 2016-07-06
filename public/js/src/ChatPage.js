@@ -9,7 +9,7 @@ function ChatPage(sign, uid, feedid) {
     return this.render();
 }
 
-ChatPage.prototyep.render = function() {
+ChatPage.prototype.render = function() {
     var loadingView = util.createLoadingView();
     var chatPage = $("<div>", {
         className: "chatPage"
