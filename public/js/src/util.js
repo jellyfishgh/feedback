@@ -5,6 +5,7 @@ function formateDT(date) {
 function formateDate(date) {
     return (date.getMonth() + 1) + '.' + date.getDate();
 }
+
 function formateTime(date) {
     return prefix(date.getHours()) + ':' + prefix(date.getMinutes());
 }
@@ -17,51 +18,52 @@ var week = ["日", "一", "二", "三", "四", "五", "六"];
 
 module.exports = {
     $: window.Zepto,
-    fetchMyFeeds: function (uid, resolve, reject, finish) {
+    fetchMyFeeds: function(uid, resolve, reject, finish) {
         this.$.ajax({
             type: 'GET',
-            url: 'mobile/feedback/api/myproblems',
+            url: '/mobile/feedback/api/myproblems',
             data: {
                 uid: uid
             },
             dataType: 'json',
             timeout: 2000,
-            success: function (feeds) {
-                resolve(feeds);
+            success: function(resJSON) {
+                if (resJSON.code === 0) resolve(resJSON.extData);
+                else reject(resJSON.code);
             },
-            error: function (xhr, errorType, error) {
+            error: function(xhr, errorType, error) {
                 reject(error);
             },
-            complete: function () {
+            complete: function() {
                 finish();
             }
         });
     },
-    postFeed: function (data, resolve, reject, finish) {
+    postFeed: function(data, resolve, reject, finish) {
         this.$.ajax({
             type: 'POST',
-            url: 'mobile/feedback/api/problem',
+            url: '/mobile/feedback/api/problem',
             data: data,
             contentType: 'application/json',
             timeout: 2000,
-            success: function (feed) {
+            success: function(feed) {
                 resolve(feed);
             },
-            error: function (xhr, errorType, error) {
+            error: function(xhr, errorType, error) {
                 reject(error);
             },
-            complete: function () {
+            complete: function() {
                 finish();
             }
         });
     },
-    fetchAnswers: function(){
+    fetchAnswers: function() {
 
     },
-    postAnswer: function(){
+    postAnswer: function() {
 
     },
-    format: function (dateLocalStr) {
+    format: function(dateLocalStr) {
         var date = new Date(dateLocalStr);
         var now = new Date();
         if (date.getFullYear() === now.getFullYear()) {
@@ -86,10 +88,10 @@ module.exports = {
             return date.toLocaleDateString();
         }
     },
-    trim: function (str) {
+    trim: function(str) {
         return str.replace(/^\s+|\s+$/g, '');
     },
-    parse: function (search) {
+    parse: function(search) {
         var queries = search.split("&");
         var json = {};
         for (var i = 0; i < queries.length; i++) {
@@ -97,5 +99,10 @@ module.exports = {
             json[kv[0]] = kv[1];
         }
         return json;
+    },
+    createLoadingView: function() {
+        return $("<div>", {
+            className: "loading center"
+        });
     }
 };

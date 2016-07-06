@@ -1,4 +1,5 @@
-var $ = require('./util').$;
+var util = require('./util');
+var $ = util.$;
 
 function MyFeedItem(feed, tapHandler) {
     this.feed = feed;
@@ -21,14 +22,14 @@ MyFeedItem.prototype.render = function() {
             className: 'feedContent',
         }))
         .append($('<p>', {
-            text: this.feed.createTime,
+            text: util.format(this.feed.createTime),
             className: 'feedDate',
         }))
         .append($('<p>', {
-            text: '回复(' + this.feed.answer_num + ')',
+            text: '回复(' + (this.feed.answer_num ? this.feed.answer_num : 0) + ')',
             className: 'feedAnswerNum',
         }))
-        .on('tap', function() {
+        .on('click', function() {
             this.tapHandler(this.feed.id);
         });
 };

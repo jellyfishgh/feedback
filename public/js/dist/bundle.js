@@ -1,5 +1,6 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var $ = require('./util').$;
+var util = require('./util');
+var $ = util.$;
 
 function MyFeedItem(feed, tapHandler) {
     this.feed = feed;
@@ -22,11 +23,11 @@ MyFeedItem.prototype.render = function() {
             className: 'feedContent',
         }))
         .append($('<p>', {
-            text: this.feed.createTime,
+            text: util.format(this.feed.createTime),
             className: 'feedDate',
         }))
         .append($('<p>', {
-            text: '回复(' + this.feed.answer_num + ')',
+            text: '回复(' + (this.feed.answer_num ? this.feed.answer_num : 0) + ')',
             className: 'feedAnswerNum',
         }))
         .on('tap', function() {
@@ -35,7 +36,7 @@ MyFeedItem.prototype.render = function() {
 };
 
 module.exports = MyFeedItem;
-},{"./util":5}],2:[function(require,module,exports){
+},{"./util":6}],2:[function(require,module,exports){
 var MyFeedItem = require('./MyFeedItem');
 var $ = require('./util').$;
 
@@ -55,7 +56,7 @@ MyFeedsList.prototype.render = function() {
 };
 
 module.exports = MyFeedsList;
-},{"./MyFeedItem":1,"./util":5}],3:[function(require,module,exports){
+},{"./MyFeedItem":1,"./util":6}],3:[function(require,module,exports){
 var MyFeedsList = require('./MyFeedsList');
 var util = require('./util');
 
@@ -63,27 +64,29 @@ function MyFeedsPage(uid, postItemTapHandler, myFeedTapHandler) {
     this.uid = uid;
     this.postItemTapHandler = postItemTapHandler;
     this.myFeedTapHandler = myFeedTapHandler;
+    return this.render();
 }
 
 MyFeedsPage.prototype = {
     constructor: MyFeedsPage,
     render: function () {
-        return $('<div>', {
+        return $('<div />', {
             className: "myFeedsPage"
-        }).append($('<p>', {
+        }).append($('<p />', {
             text: '意见反馈',
             className: 'postFeedItem',
             id: 'postFeedItem'
-        }).on('tap', this.postItemTapHandler)).append(this.init());
+        }).on('click', this.postItemTapHandler))
+        .append(this.init());
     },
     init: function () {
-        var myFeedsListView = $('<div>', {
+        var myFeedsListView = $('<div />', {
             className: 'myFeedsListView'
-        }).append($('<p>', {
+        }).append($('<p/ >', {
             text: '我的反馈',
             className: 'myFeedsTitle'
         }));
-        var loadingView = $("<div>", {
+        var loadingView = $("<div/ >", {
             className: "loading center"
         });
         myFeedsListView.append(loadingView);
@@ -91,13 +94,13 @@ MyFeedsPage.prototype = {
             if (feeds.length > 0) {
                 myFeedsListView.append(new MyFeedsList(feeds, this.myFeedTapHandler).render());
             } else {
-                myFeedsListView.append($("<div>", {
+                myFeedsListView.append($("<div/ >", {
                     className: "center info",
                     text: "你还没有提交过反馈。"
                 }));
             }
         }, function () {
-            myFeedsListView.append($("<div>", {
+            myFeedsListView.append($("<div/ >", {
                 className: "center info",
                 text: "加载失败，请稍后重试。"
             }));
@@ -109,10 +112,63 @@ MyFeedsPage.prototype = {
 };
 
 module.exports = MyFeedsPage;
-},{"./MyFeedsList":2,"./util":5}],4:[function(require,module,exports){
+},{"./MyFeedsList":2,"./util":6}],4:[function(require,module,exports){
+var $ = require('./util').$;
+
+function PostFeedPage(searchObj) {
+    this.uid = searchObj.uid;
+    this.email = searchObj.email;
+    this.devName = searchObj.devName;
+    this.sysVersion = searchObj.sysVersion;
+    this.appVersion = searchObj.appVersion;
+    this.platform = searchObj.platform;
+    return this.render();
+}
+
+PostFeedPage.prototype.render = function() {
+    return $("<div />", {
+            id: "postFeed",
+            className: "postFeed"
+        })
+        .append($("<textarea />", {
+            name: "feedContent",
+            id: "feedContent",
+            className: "feedContent",
+            cols: "30",
+            rows: "10",
+            placeholder: "你的宝贵意见，是我们前进的动力。"
+        }))
+        .append($("<label />", {
+            for: "isLogged"
+        }))
+        .append($("<checkbox />", {
+            id: "isLogged",
+            checked: "checked",
+            text: "上传日志"
+        }))
+        .append($("<p />", {
+            className: "picTitle",
+            text: "提供图片以协助我们解决问题"
+        }))
+        .append($("<p />", {
+            id: "picLimit",
+            className: "picLimit",
+            text: "0/2"
+        }))
+        .append($("<file />"))
+        .append($("<button />", {
+            text: "完成"
+        }).on("tap", function() {
+            util.postFeed()
+        }));
+};
+
+module.exports = PostFeedPage;
+},{"./util":6}],5:[function(require,module,exports){
 var util = require('./util');
 var $ = util.$;
 var MyFeedsPage = require('./MyFeedsPage');
+var PostFeedPage = require('./PostFeedPage');
 
 /*
     {
@@ -124,21 +180,22 @@ var MyFeedsPage = require('./MyFeedsPage');
         platform: 1
     }
 */
+
+// http://localhost:3000/html/index.html?uid=41140472&email=javaxmail@2980.com&devName=iPhone5,2&sysVersion=9.3.2&appVersion=1.1.1&platform=1
+
 var searchObj = util.parse(location.search.slice(1));
-console.log(searchObj);
 
 var feedsPage = new MyFeedsPage(searchObj.uid, function(){
     feedsPage.hide();
-    $(document).append(new PostFeedPage(searchObj).render());
+    $(document.body).append(new PostFeedPage(searchObj));
 }, function(feedid){
+    console.log("tap item detail");
     feedsPage.hide();
-    $(document).append(new ChatPage(feedid).render());
+    $(document.body).append(new ChatPage(feedid));
 });
 
-$(document).append(feedsPage.render());
-
-
-},{"./MyFeedsPage":3,"./util":5}],5:[function(require,module,exports){
+$(document.body).append(feedsPage);
+},{"./MyFeedsPage":3,"./PostFeedPage":4,"./util":6}],6:[function(require,module,exports){
 function formateDT(date) {
     return formateDate(date) + " " + formateTime(date);
 }
@@ -161,14 +218,15 @@ module.exports = {
     fetchMyFeeds: function (uid, resolve, reject, finish) {
         this.$.ajax({
             type: 'GET',
-            url: 'mobile/feedback/api/myproblems',
+            url: '/mobile/feedback/api/myproblems',
             data: {
                 uid: uid
             },
             dataType: 'json',
             timeout: 2000,
-            success: function (feeds) {
-                resolve(feeds);
+            success: function (resJSON) {
+                if(resJSON.code === 0)resolve(resJSON.extData);
+                else reject(resJSON.code);
             },
             error: function (xhr, errorType, error) {
                 reject(error);
@@ -181,7 +239,7 @@ module.exports = {
     postFeed: function (data, resolve, reject, finish) {
         this.$.ajax({
             type: 'POST',
-            url: 'mobile/feedback/api/problem',
+            url: '/mobile/feedback/api/problem',
             data: data,
             contentType: 'application/json',
             timeout: 2000,
@@ -240,4 +298,4 @@ module.exports = {
         return json;
     }
 };
-},{}]},{},[4]);
+},{}]},{},[5]);

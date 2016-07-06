@@ -5,6 +5,7 @@ function MyFeedsPage(uid, postItemTapHandler, myFeedTapHandler) {
     this.uid = uid;
     this.postItemTapHandler = postItemTapHandler;
     this.myFeedTapHandler = myFeedTapHandler;
+    return this.render();
 }
 
 MyFeedsPage.prototype = {
@@ -16,7 +17,8 @@ MyFeedsPage.prototype = {
             text: '意见反馈',
             className: 'postFeedItem',
             id: 'postFeedItem'
-        }).on('tap', this.postItemTapHandler)).append(this.init());
+        }).on('click', this.postItemTapHandler))
+        .append(this.init());
     },
     init: function () {
         var myFeedsListView = $('<div>', {
@@ -25,9 +27,7 @@ MyFeedsPage.prototype = {
             text: '我的反馈',
             className: 'myFeedsTitle'
         }));
-        var loadingView = $("<div>", {
-            className: "loading center"
-        });
+        var loadingView = util.createLoadingView();
         myFeedsListView.append(loadingView);
         util.fetchMyFeeds(this.uid, function (feeds) {
             if (feeds.length > 0) {
