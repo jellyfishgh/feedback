@@ -4,6 +4,7 @@ var MsgItem = require('./MsgItem');
 
 function MsgsList(answers) {
     this.answers = answers;
+    return this.render();
 }
 
 MsgsList.prototype.render = function () {

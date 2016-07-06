@@ -57,11 +57,47 @@ module.exports = {
             }
         });
     },
-    fetchAnswers: function() {
-
+    fetchAnswers: function(feedid, resolve, reject, finish) {
+        this.$.ajax({
+            type: 'GET',
+            url: '/mobile/feedback/api/problemdetail',
+            data: {
+                feedbackid: feedid
+            },
+            contentType: 'application/json',
+            timeout: 2000,
+            success: function(resJSON) {
+                if (resJSON.code === 0) {
+                    resolve(resJSON.answers);
+                } else {
+                    reject(resJSON.code);
+                }
+            },
+            error: function(xhr, errorType, error) {
+                reject(error);
+            },
+            complete: function() {
+                finish();
+            }
+        });
     },
-    postAnswer: function() {
-
+    postAnswer: function(data, resolve, reject, finish) {
+        this.$.ajax({
+            type: 'POST',
+            url: '/mobile/feedback/api/answer',
+            data: data,
+            contentType: 'application/json',
+            timeout: 2000,
+            success: function(feed) {
+                resolve(feed);
+            },
+            error: function(xhr, errorType, error) {
+                reject(error);
+            },
+            complete: function() {
+                finish();
+            }
+        });
     },
     format: function(dateLocalStr) {
         var date = new Date(dateLocalStr);
@@ -104,5 +140,11 @@ module.exports = {
         return $("<div>", {
             className: "loading center"
         });
+    },
+    createErrorView: function() {
+        return $("<div>", {
+            className: "center info",
+            text: "加载失败，请稍后重试。"
+        })
     }
 };

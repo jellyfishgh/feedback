@@ -31,7 +31,7 @@ MyFeedItem.prototype.render = function() {
         }))
         .on('click', function() {
             this.tapHandler(this.feed.id);
-        });
+        }.bind(this));
 };
 
 module.exports = MyFeedItem;

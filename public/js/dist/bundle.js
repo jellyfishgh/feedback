@@ -30,9 +30,9 @@ MyFeedItem.prototype.render = function() {
             text: '回复(' + (this.feed.answer_num ? this.feed.answer_num : 0) + ')',
             className: 'feedAnswerNum',
         }))
-        .on('tap', function() {
+        .on('click', function() {
             this.tapHandler(this.feed.id);
-        });
+        }.bind(this));
 };
 
 module.exports = MyFeedItem;
@@ -70,9 +70,9 @@ function MyFeedsPage(uid, postItemTapHandler, myFeedTapHandler) {
 MyFeedsPage.prototype = {
     constructor: MyFeedsPage,
     render: function () {
-        return $('<div />', {
+        return $('<div>', {
             className: "myFeedsPage"
-        }).append($('<p />', {
+        }).append($('<p>', {
             text: '意见反馈',
             className: 'postFeedItem',
             id: 'postFeedItem'
@@ -80,30 +80,25 @@ MyFeedsPage.prototype = {
         .append(this.init());
     },
     init: function () {
-        var myFeedsListView = $('<div />', {
+        var myFeedsListView = $('<div>', {
             className: 'myFeedsListView'
-        }).append($('<p/ >', {
+        }).append($('<p>', {
             text: '我的反馈',
             className: 'myFeedsTitle'
         }));
-        var loadingView = $("<div/ >", {
-            className: "loading center"
-        });
+        var loadingView = util.createLoadingView();
         myFeedsListView.append(loadingView);
         util.fetchMyFeeds(this.uid, function (feeds) {
             if (feeds.length > 0) {
                 myFeedsListView.append(new MyFeedsList(feeds, this.myFeedTapHandler).render());
             } else {
-                myFeedsListView.append($("<div/ >", {
+                myFeedsListView.append($("<div>", {
                     className: "center info",
                     text: "你还没有提交过反馈。"
                 }));
             }
         }, function () {
-            myFeedsListView.append($("<div/ >", {
-                className: "center info",
-                text: "加载失败，请稍后重试。"
-            }));
+            myFeedsListView.append(util.createErrorView());
         }, function () {
             loadingView.hide();
         });
@@ -116,6 +111,7 @@ module.exports = MyFeedsPage;
 var $ = require('./util').$;
 
 function PostFeedPage(searchObj) {
+    this.sign = searchObj.sign;
     this.uid = searchObj.uid;
     this.email = searchObj.email;
     this.devName = searchObj.devName;
@@ -126,11 +122,11 @@ function PostFeedPage(searchObj) {
 }
 
 PostFeedPage.prototype.render = function() {
-    return $("<div />", {
+    return $("<div>", {
             id: "postFeed",
             className: "postFeed"
         })
-        .append($("<textarea />", {
+        .append($("<textarea>", {
             name: "feedContent",
             id: "feedContent",
             className: "feedContent",
@@ -138,28 +134,28 @@ PostFeedPage.prototype.render = function() {
             rows: "10",
             placeholder: "你的宝贵意见，是我们前进的动力。"
         }))
-        .append($("<label />", {
+        .append($("<label>", {
             for: "isLogged"
         }))
-        .append($("<checkbox />", {
+        .append($("<checkbox>", {
             id: "isLogged",
             checked: "checked",
             text: "上传日志"
         }))
-        .append($("<p />", {
+        .append($("<p>", {
             className: "picTitle",
             text: "提供图片以协助我们解决问题"
         }))
-        .append($("<p />", {
+        .append($("<p>", {
             id: "picLimit",
             className: "picLimit",
             text: "0/2"
         }))
-        .append($("<file />"))
-        .append($("<button />", {
+        .append($("<file>"))
+        .append($("<button>", {
             text: "完成"
         }).on("tap", function() {
-            util.postFeed()
+            util.postFeed();
         }));
 };
 
@@ -172,6 +168,7 @@ var PostFeedPage = require('./PostFeedPage');
 
 /*
     {
+        sign: 'abc'
         uid: '41140472',
         email: 'javaxmail@2980.com',
         devName: 'iPhone5,2',
@@ -185,13 +182,12 @@ var PostFeedPage = require('./PostFeedPage');
 
 var searchObj = util.parse(location.search.slice(1));
 
-var feedsPage = new MyFeedsPage(searchObj.uid, function(){
+var feedsPage = new MyFeedsPage(searchObj.uid, function() {
     feedsPage.hide();
     $(document.body).append(new PostFeedPage(searchObj));
-}, function(feedid){
-    console.log("tap item detail");
+}, function(feedid) {
     feedsPage.hide();
-    $(document.body).append(new ChatPage(feedid));
+    $(document.body).append(new ChatPage(searchObj.sign, searchObj.uid, feedid));
 });
 
 $(document.body).append(feedsPage);
@@ -203,6 +199,7 @@ function formateDT(date) {
 function formateDate(date) {
     return (date.getMonth() + 1) + '.' + date.getDate();
 }
+
 function formateTime(date) {
     return prefix(date.getHours()) + ':' + prefix(date.getMinutes());
 }
@@ -215,7 +212,7 @@ var week = ["日", "一", "二", "三", "四", "五", "六"];
 
 module.exports = {
     $: window.Zepto,
-    fetchMyFeeds: function (uid, resolve, reject, finish) {
+    fetchMyFeeds: function(uid, resolve, reject, finish) {
         this.$.ajax({
             type: 'GET',
             url: '/mobile/feedback/api/myproblems',
@@ -224,43 +221,79 @@ module.exports = {
             },
             dataType: 'json',
             timeout: 2000,
-            success: function (resJSON) {
-                if(resJSON.code === 0)resolve(resJSON.extData);
+            success: function(resJSON) {
+                if (resJSON.code === 0) resolve(resJSON.extData);
                 else reject(resJSON.code);
             },
-            error: function (xhr, errorType, error) {
+            error: function(xhr, errorType, error) {
                 reject(error);
             },
-            complete: function () {
+            complete: function() {
                 finish();
             }
         });
     },
-    postFeed: function (data, resolve, reject, finish) {
+    postFeed: function(data, resolve, reject, finish) {
         this.$.ajax({
             type: 'POST',
             url: '/mobile/feedback/api/problem',
             data: data,
             contentType: 'application/json',
             timeout: 2000,
-            success: function (feed) {
+            success: function(feed) {
                 resolve(feed);
             },
-            error: function (xhr, errorType, error) {
+            error: function(xhr, errorType, error) {
                 reject(error);
             },
-            complete: function () {
+            complete: function() {
                 finish();
             }
         });
     },
-    fetchAnswers: function(){
-
+    fetchAnswers: function(feedid, resolve, reject, finish) {
+        this.$.ajax({
+            type: 'GET',
+            url: '/mobile/feedback/api/problemdetail',
+            data: {
+                feedbackid: feedid
+            },
+            contentType: 'application/json',
+            timeout: 2000,
+            success: function(resJSON) {
+                if (resJSON.code === 0) {
+                    resolve(resJSON.answers);
+                } else {
+                    reject(resJSON.code);
+                }
+            },
+            error: function(xhr, errorType, error) {
+                reject(error);
+            },
+            complete: function() {
+                finish();
+            }
+        });
     },
-    postAnswer: function(){
-
+    postAnswer: function(data, resolve, reject, finish) {
+        this.$.ajax({
+            type: 'POST',
+            url: '/mobile/feedback/api/answer',
+            data: data,
+            contentType: 'application/json',
+            timeout: 2000,
+            success: function(feed) {
+                resolve(feed);
+            },
+            error: function(xhr, errorType, error) {
+                reject(error);
+            },
+            complete: function() {
+                finish();
+            }
+        });
     },
-    format: function (dateLocalStr) {
+    format: function(dateLocalStr) {
         var date = new Date(dateLocalStr);
         var now = new Date();
         if (date.getFullYear() === now.getFullYear()) {
@@ -285,10 +318,10 @@ module.exports = {
             return date.toLocaleDateString();
         }
     },
-    trim: function (str) {
+    trim: function(str) {
         return str.replace(/^\s+|\s+$/g, '');
     },
-    parse: function (search) {
+    parse: function(search) {
         var queries = search.split("&");
         var json = {};
         for (var i = 0; i < queries.length; i++) {
@@ -296,6 +329,17 @@ module.exports = {
             json[kv[0]] = kv[1];
         }
         return json;
+    },
+    createLoadingView: function() {
+        return $("<div>", {
+            className: "loading center"
+        });
+    },
+    createErrorView: function() {
+        return $("<div>", {
+            className: "center info",
+            text: "加载失败，请稍后重试。"
+        })
     }
 };
 },{}]},{},[5]);

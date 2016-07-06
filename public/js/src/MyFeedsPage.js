@@ -39,10 +39,7 @@ MyFeedsPage.prototype = {
                 }));
             }
         }, function () {
-            myFeedsListView.append($("<div>", {
-                className: "center info",
-                text: "加载失败，请稍后重试。"
-            }));
+            myFeedsListView.append(util.createErrorView());
         }, function () {
             loadingView.hide();
         });
