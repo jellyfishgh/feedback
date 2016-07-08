@@ -1,4 +1,5 @@
 var $ = require('./util').$;
+var ImgUploader = require('./ImgUploader');
 
 function PostFeedPage(searchObj) {
     this.sign = searchObj.sign;
@@ -41,7 +42,7 @@ PostFeedPage.prototype.render = function() {
             className: "picLimit",
             text: "0/2"
         }))
-        .append($("<file>"))
+        .append(new ImgUploader().render())
         .append($("<button>", {
             text: "完成"
         }).on("tap", function() {

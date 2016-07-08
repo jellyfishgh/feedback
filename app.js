@@ -26,21 +26,34 @@ const routes = {
     '/mobile/feedback/api/problemdetail': {
         method: 'GET',
         handler: createGetHandler()
+    },
+    '/imgServer': {
+        method: 'POST',
+        handler: function(req, res) {
+            console.log(request.headers);
+            var body = [];
+            request.on('data', function(chunk) {
+                body.push(chunk);
+            }).on('end', function() {
+                body = Buffer.concat(body);
+                console.log(body);
+            });
+        }
     }
 };
 
 function createPostHandler() {
-    return function (api, req, res) {
+    return function(api, req, res) {
         var body = [];
-        request.on('data', function (chunk) {
+        request.on('data', function(chunk) {
             body.push(chunk);
-        }).on('end', function () {
+        }).on('end', function() {
             body = Buffer.concat(body).toString();
             console.log(body);
             request.post({
                 url: api,
                 form: querystring.parse(body)
-            }, function (err, httpResponse, body) {
+            }, function(err, httpResponse, body) {
                 console.log(body);
                 res.end(body);
             });
@@ -49,9 +62,9 @@ function createPostHandler() {
 }
 
 function createGetHandler() {
-    return function (api, req, res) {
+    return function(api, req, res) {
         const search = url.parse(req.url).search;
-        request(`${api}${search}`, function (error, response, body) {
+        request(`${api}${search}`, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 res.end(body);
             }
