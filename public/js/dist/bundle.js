@@ -45,7 +45,36 @@ ChatPage.prototype.render = function() {
 };
 
 module.exports = ChatPage;
-},{"./MsgsList":3,"./util":9}],2:[function(require,module,exports){
+},{"./MsgsList":4,"./util":10}],2:[function(require,module,exports){
+var $ = require('./util').$;
+
+function ImgUploader() {
+
+}
+
+ImgUploader.prototype.render = function() {
+    return $('<div>', {
+            id: 'uploader',
+            className: 'wu-example'
+        })
+        .append($('<div>', {
+            id: 'thelist',
+            className: 'uploader-list'
+        }))
+        .append($('<div>', {
+            className: 'btns'
+        }).append($('<div>', {
+            id: picker,
+            text: '选择文件'
+        })).append($('<buttton>', {
+            id: 'ctlBtn',
+            className: 'btn btn-default',
+            text: '开始上传'
+        })));
+}
+
+module.exports = ImgUploader;
+},{"./util":10}],3:[function(require,module,exports){
 var util = require('./util');
 var $ = util.$;
 
@@ -77,7 +106,7 @@ MsgItem.prototype.render = function() {
 };
 
 module.exports = MsgItem;
-},{"./util":9}],3:[function(require,module,exports){
+},{"./util":10}],4:[function(require,module,exports){
 var util = require('./util');
 var $ = util.$;
 var MsgItem = require('./MsgItem');
@@ -107,7 +136,7 @@ MsgsList.prototype.render = function () {
 };
 
 module.exports = MsgsList;
-},{"./MsgItem":2,"./util":9}],4:[function(require,module,exports){
+},{"./MsgItem":3,"./util":10}],5:[function(require,module,exports){
 var util = require('./util');
 var $ = util.$;
 
@@ -119,25 +148,25 @@ function MyFeedItem(feed, tapHandler) {
 MyFeedItem.prototype.render = function() {
     return $('<li>', {
             id: 'feedItem' + this.feed.id,
-            className: 'feedItem',
+            class: 'feedItem',
         })
         .append($('<div>', {
-            className: 'reminder',
+            class: 'reminder',
             css: {
                 display: this.feed.userremind ? 'inline' : 'none',
             },
         }))
         .append($('<p>', {
             text: this.feed.content,
-            className: 'feedContent',
+            class: 'feedContent',
         }))
         .append($('<p>', {
             text: util.format(this.feed.createTime),
-            className: 'feedDate',
+            class: 'feedDate',
         }))
         .append($('<p>', {
             text: '回复(' + (this.feed.answer_num ? this.feed.answer_num : 0) + ')',
-            className: 'feedAnswerNum',
+            class: 'feedAnswerNum',
         }))
         .on('click', function() {
             this.tapHandler(this.feed.id);
@@ -145,7 +174,7 @@ MyFeedItem.prototype.render = function() {
 };
 
 module.exports = MyFeedItem;
-},{"./util":9}],5:[function(require,module,exports){
+},{"./util":10}],6:[function(require,module,exports){
 var MyFeedItem = require('./MyFeedItem');
 var $ = require('./util').$;
 
@@ -165,7 +194,7 @@ MyFeedsList.prototype.render = function() {
 };
 
 module.exports = MyFeedsList;
-},{"./MyFeedItem":4,"./util":9}],6:[function(require,module,exports){
+},{"./MyFeedItem":5,"./util":10}],7:[function(require,module,exports){
 var MyFeedsList = require('./MyFeedsList');
 var util = require('./util');
 
@@ -178,37 +207,41 @@ function MyFeedsPage(uid, postItemTapHandler, myFeedTapHandler) {
 
 MyFeedsPage.prototype = {
     constructor: MyFeedsPage,
-    render: function () {
+    render: function() {
         return $('<div>', {
-            className: "myFeedsPage"
-        }).append($('<p>', {
-            text: '意见反馈',
-            className: 'postFeedItem',
-            id: 'postFeedItem'
-        }).on('click', this.postItemTapHandler))
-        .append(this.init());
+                class: "myFeedsPage"
+            })
+            .append($('<p>', {
+                text: '意见反馈',
+                class: 'postFeedItem',
+                id: 'postFeedItem'
+            }).append($('<span>', {
+                text: '>',
+                class: 'inArrow',
+            })).on('click', this.postItemTapHandler))
+            .append(this.init());
     },
-    init: function () {
+    init: function() {
         var myFeedsListView = $('<div>', {
-            className: 'myFeedsListView'
+            class: 'myFeedsListView'
         }).append($('<p>', {
             text: '我的反馈',
-            className: 'myFeedsTitle'
+            class: 'myFeedsTitle'
         }));
         var loadingView = util.createLoadingView();
         myFeedsListView.append(loadingView);
-        util.fetchMyFeeds(this.uid, function (feeds) {
+        util.fetchMyFeeds(this.uid, function(feeds) {
             if (feeds.length > 0) {
                 myFeedsListView.append(new MyFeedsList(feeds, this.myFeedTapHandler).render());
             } else {
                 myFeedsListView.append($("<div>", {
-                    className: "center info",
+                    class: "center info",
                     text: "你还没有提交过反馈。"
                 }));
             }
-        }.bind(this), function () {
+        }.bind(this), function() {
             myFeedsListView.append(util.createErrorView());
-        }, function () {
+        }, function() {
             loadingView.hide();
         });
         return myFeedsListView;
@@ -216,8 +249,9 @@ MyFeedsPage.prototype = {
 };
 
 module.exports = MyFeedsPage;
-},{"./MyFeedsList":5,"./util":9}],7:[function(require,module,exports){
+},{"./MyFeedsList":6,"./util":10}],8:[function(require,module,exports){
 var $ = require('./util').$;
+var ImgUploader = require('./ImgUploader');
 
 function PostFeedPage(searchObj) {
     this.sign = searchObj.sign;
@@ -260,7 +294,7 @@ PostFeedPage.prototype.render = function() {
             className: "picLimit",
             text: "0/2"
         }))
-        .append($("<file>"))
+        .append(new ImgUploader().render())
         .append($("<button>", {
             text: "完成"
         }).on("tap", function() {
@@ -269,7 +303,7 @@ PostFeedPage.prototype.render = function() {
 };
 
 module.exports = PostFeedPage;
-},{"./util":9}],8:[function(require,module,exports){
+},{"./ImgUploader":2,"./util":10}],9:[function(require,module,exports){
 var util = require('./util');
 var $ = util.$;
 var MyFeedsPage = require('./MyFeedsPage');
@@ -301,7 +335,7 @@ var feedsPage = new MyFeedsPage(searchObj.uid, function() {
 });
 
 $(document.body).append(feedsPage);
-},{"./ChatPage":1,"./MyFeedsPage":6,"./PostFeedPage":7,"./util":9}],9:[function(require,module,exports){
+},{"./ChatPage":1,"./MyFeedsPage":7,"./PostFeedPage":8,"./util":10}],10:[function(require,module,exports){
 function formateDT(date) {
     return formateDate(date) + " " + formateTime(date);
 }
@@ -452,4 +486,4 @@ module.exports = {
         })
     }
 };
-},{}]},{},[8]);
+},{}]},{},[9]);

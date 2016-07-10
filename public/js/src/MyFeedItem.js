@@ -9,25 +9,25 @@ function MyFeedItem(feed, tapHandler) {
 MyFeedItem.prototype.render = function() {
     return $('<li>', {
             id: 'feedItem' + this.feed.id,
-            className: 'feedItem',
+            class: 'feedItem',
         })
         .append($('<div>', {
-            className: 'reminder',
+            class: 'reminder',
             css: {
                 display: this.feed.userremind ? 'inline' : 'none',
             },
         }))
         .append($('<p>', {
             text: this.feed.content,
-            className: 'feedContent',
+            class: 'feedContent',
         }))
         .append($('<p>', {
             text: util.format(this.feed.createTime),
-            className: 'feedDate',
+            class: 'feedDate',
         }))
         .append($('<p>', {
             text: '回复(' + (this.feed.answer_num ? this.feed.answer_num : 0) + ')',
-            className: 'feedAnswerNum',
+            class: 'feedAnswerNum',
         }))
         .on('click', function() {
             this.tapHandler(this.feed.id);

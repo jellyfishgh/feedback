@@ -10,37 +10,41 @@ function MyFeedsPage(uid, postItemTapHandler, myFeedTapHandler) {
 
 MyFeedsPage.prototype = {
     constructor: MyFeedsPage,
-    render: function () {
+    render: function() {
         return $('<div>', {
-            className: "myFeedsPage"
-        }).append($('<p>', {
-            text: '意见反馈',
-            className: 'postFeedItem',
-            id: 'postFeedItem'
-        }).on('click', this.postItemTapHandler))
-        .append(this.init());
+                class: "myFeedsPage"
+            })
+            .append($('<p>', {
+                text: '意见反馈',
+                class: 'postFeedItem',
+                id: 'postFeedItem'
+            }).append($('<span>', {
+                text: '>',
+                class: 'inArrow',
+            })).on('click', this.postItemTapHandler))
+            .append(this.init());
     },
-    init: function () {
+    init: function() {
         var myFeedsListView = $('<div>', {
-            className: 'myFeedsListView'
+            class: 'myFeedsListView'
         }).append($('<p>', {
             text: '我的反馈',
-            className: 'myFeedsTitle'
+            class: 'myFeedsTitle'
         }));
         var loadingView = util.createLoadingView();
         myFeedsListView.append(loadingView);
-        util.fetchMyFeeds(this.uid, function (feeds) {
+        util.fetchMyFeeds(this.uid, function(feeds) {
             if (feeds.length > 0) {
                 myFeedsListView.append(new MyFeedsList(feeds, this.myFeedTapHandler).render());
             } else {
                 myFeedsListView.append($("<div>", {
-                    className: "center info",
+                    class: "center info",
                     text: "你还没有提交过反馈。"
                 }));
             }
-        }.bind(this), function () {
+        }.bind(this), function() {
             myFeedsListView.append(util.createErrorView());
-        }, function () {
+        }, function() {
             loadingView.hide();
         });
         return myFeedsListView;
