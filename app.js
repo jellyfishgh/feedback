@@ -9,7 +9,7 @@ const querystring = require('querystring');
 
 const hostname = '127.0.0.1';
 const port = 3000;
-const apiHost = 'http://ywweb.duoyi.com/';
+const apiHost = 'localhost:3001';
 const routes = {
     '/mobile/feedback/api/problem': {
         method: 'POST',
@@ -58,7 +58,7 @@ function createPostHandler() {
                 res.end(body);
             });
         });
-    }
+    };
 }
 
 function createGetHandler() {
@@ -69,7 +69,7 @@ function createGetHandler() {
                 res.end(body);
             }
         });
-    }
+    };
 }
 
 const server = http.createServer((req, res) => {
@@ -101,12 +101,12 @@ const server = http.createServer((req, res) => {
                         res.setHeader('Last-Modified', mtimeUTCString);
                         if (acceptEncoding && acceptEncoding.indexOf('gzip') != -1) {
                             res.writeHead(200, {
-                                "content-encoding": "gzip"
+                                'content-encoding': 'gzip'
                             });
                             readStream.pipe(zlib.createGzip()).pipe(res);
                         } else if (acceptEncoding && acceptEncoding.indexOf('deflate') != -1) {
                             res.writeHead(200, {
-                                "content-encoding": "deflate"
+                                'content-encoding': 'deflate'
                             });
                             readStream.pipe(zlib.createDeflate()).pipe(res);
                         } else {
