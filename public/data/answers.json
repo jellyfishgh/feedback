@@ -1,0 +1,138 @@
+{
+    "0": {
+        "code": 0,
+        "extData": {
+            "problem": {
+                "id": 0,
+                "uid": 47734976,
+                "email": "13107424331@139.com",
+                "content": "什么时候推出夜间模式？",
+                "picurl": "",
+                "logurl": "",
+                "answer_num": 3,
+                "devName": "iPhone6,1",
+                "sysVersion": "9.3.3",
+                "appVersion": "1.1.2",
+                "platform": 0,
+                "createTime": "2016-06-22T08:23:12.000Z"
+            },
+            "answerList": [
+                {
+                    "id": 0,
+                    "feedbackid": 0,
+                    "uid": "hemu@henhaoji.com",
+                    "content": "下个版本你就可以看到了，谢谢",
+                    "picurl": "",
+                    "type": 1,
+                    "createTime": "2016-06-22T09:49:12.000Z"
+                },
+                {
+                    "id": 1,
+                    "feedbackid": 0,
+                    "uid": "47734976",
+                    "content": "下个版本什么时候发布呢？",
+                    "picurl": "",
+                    "type": 2,
+                    "createTime": "2016-06-22T10:49:12.000Z"
+                },
+                {
+                    "id": 2,
+                    "feedbackid": 0,
+                    "uid": "47734976",
+                    "content": "快点回答我！！！",
+                    "picurl": "",
+                    "type": 2,
+                    "createTime": "2016-06-23T07:49:12.000Z"
+                }
+            ]
+        }
+    },
+    "1": {
+        "code": 0,
+        "extData": {
+            "problem": {
+                "id": 1,
+                "uid": 47734976,
+                "email": "13107424331@139.com",
+                "content": "什么时候可以换肤？",
+                "picurl": "",
+                "logurl": "",
+                "answer_num": 5,
+                "devName": "iPhone6,1",
+                "sysVersion": "9.3.3",
+                "appVersion": "1.1.2",
+                "platform": 0,
+                "createTime": "2016-07-20T08:23:12.000Z"
+            },
+            "answerList": [
+                {
+                    "id": 3,
+                    "feedbackid": 1,
+                    "uid": "47734976",
+                    "content": "客服去哪儿呢？还不回答我",
+                    "picurl": "",
+                    "type": 2,
+                    "createTime": "2016-07-20T09:49:12.000Z"
+                },
+                {
+                    "id": 4,
+                    "feedbackid": 1,
+                    "uid": "hemu@henhaoji.com",
+                    "content": "请更新最新版本，即可体验换肤功能。",
+                    "picurl": "",
+                    "type": 1,
+                    "createTime": "2016-07-20T10:49:12.000Z"
+                },
+                {
+                    "id": 5,
+                    "feedbackid": 1,
+                    "uid": "47734976",
+                    "content": "我已经更新到了最新版本，换了一个大红主题色，哈哈",
+                    "picurl": "",
+                    "type": 2,
+                    "createTime": "2016-07-20T12:30:12.000Z"
+                },
+                {
+                    "id": 6,
+                    "feedbackid": 1,
+                    "uid": "47734976",
+                    "content": "谢谢你",
+                    "picurl": "",
+                    "type": 2,
+                    "createTime": "2016-07-21T13:22:12.000Z"
+                },
+                {
+                    "id": 7,
+                    "feedbackid": 1,
+                    "uid": "hemu@henhaoji.com",
+                    "content": "不客气，感谢你的使用。",
+                    "picurl": "",
+                    "type": 1,
+                    "createTime": "2016-07-20T14:49:12.000Z"
+                }
+            ]
+        }
+    },
+    "2": {
+        "code": 0,
+        "message": "",
+        "extData": {
+            "problem": {
+                "id": 2,
+                "uid": 41140472,
+                "email": "jellyfish@2980.com",
+                "content": "什么时候可以更新新版本呀？",
+                "picurl": "",
+                "logurl": "",
+                "userremind": 0,
+                "devName": "iPhone6,1",
+                "sysVersion": "9.3.3",
+                "appVersion": "1.1.2",
+                "platform": 0,
+                "createTime": "2016-06-24T08:23:12.000Z"
+            },
+            "answerList": [
+            ]
+        }
+    }
+}

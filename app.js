@@ -26,20 +26,20 @@ const routes = {
     '/mobile/feedback/api/problemdetail': {
         method: 'GET',
         handler: createGetHandler()
-    },
-    '/imgServer': {
-        method: 'POST',
-        handler: function(req, res) {
-            console.log(request.headers);
-            var body = [];
-            request.on('data', function(chunk) {
-                body.push(chunk);
-            }).on('end', function() {
-                body = Buffer.concat(body);
-                console.log(body);
-            });
-        }
     }
+    // '/imgServer': {
+    //     method: 'POST',
+    //     handler: function(req, res) {
+    //         console.log(request.headers);
+    //         var body = [];
+    //         request.on('data', function(chunk) {
+    //             body.push(chunk);
+    //         }).on('end', function() {
+    //             body = Buffer.concat(body);
+    //             console.log(body);
+    //         });
+    //     }
+    // }
 };
 
 function createPostHandler() {
