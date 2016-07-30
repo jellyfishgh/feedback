@@ -1,5 +1,5 @@
 function formateDT(date) {
-    return formateDate(date) + " " + formateTime(date);
+    return formateDate(date) + ' ' + formateTime(date);
 }
 
 function formateDate(date) {
@@ -14,7 +14,7 @@ function prefix(num) {
     return num < 10 ? '0' + num : num;
 }
 
-var week = ["日", "一", "二", "三", "四", "五", "六"];
+var week = ['日', '一', '二', '三', '四', '五', '六'];
 
 module.exports = {
     $: window.Zepto,
@@ -128,23 +128,23 @@ module.exports = {
         return str.replace(/^\s+|\s+$/g, '');
     },
     parse: function(search) {
-        var queries = search.split("&");
+        var queries = search.split('&');
         var json = {};
         for (var i = 0; i < queries.length; i++) {
-            var kv = queries[i].split("=");
+            var kv = queries[i].split('=');
             json[kv[0]] = kv[1];
         }
         return json;
     },
     createLoadingView: function() {
-        return $("<div>", {
-            className: "loading center"
+        return this.$('<div>', {
+            className: 'loading center'
         });
     },
     createErrorView: function() {
-        return $("<div>", {
-            className: "center info",
-            text: "加载失败，请稍后重试。"
-        })
+        return this.$('<div>', {
+            className: 'center info',
+            text: '加载失败，请稍后重试。'
+        });
     }
 };

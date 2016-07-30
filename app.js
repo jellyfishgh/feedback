@@ -64,6 +64,7 @@ function createPostHandler() {
 function createGetHandler() {
     return function(api, req, res) {
         const search = url.parse(req.url).search;
+        console.log(`get handler ${api}${search}`);
         request(`${api}${search}`, function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 res.end(body);

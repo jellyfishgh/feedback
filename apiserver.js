@@ -12,6 +12,7 @@ const server = http.createServer((req, res) => {
         urlObj = url.parse(req.url);
     let pathname = urlObj.pathname,
         searchObj = querystring.parse(urlObj.search);
+    console.log(`${method} ${pathname}`);
     if (method === 'GET') {
         if (pathname === '/mobile/feedback/api/myproblems') {
             fs.readFile(path.join(__dirname, './public/data/problems.json'), 'utf-8', (err, data) => {
