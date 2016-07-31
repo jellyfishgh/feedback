@@ -9,7 +9,7 @@ const querystring = require('querystring');
 
 const hostname = '127.0.0.1';
 const port = 3000;
-const apiHost = 'localhost:3001';
+const apiHost = 'http://127.0.0.1:3001';
 const routes = {
     '/mobile/feedback/api/problem': {
         method: 'POST',
@@ -66,7 +66,7 @@ function createGetHandler() {
         const search = url.parse(req.url).search;
         console.log(`get handler ${api}${search}`);
         request(`${api}${search}`, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
+            if (!error && response.statusCode === 200) {
                 res.end(body);
             }
         });

@@ -11,26 +11,26 @@ const server = http.createServer((req, res) => {
     let method = req.method,
         urlObj = url.parse(req.url);
     let pathname = urlObj.pathname,
-        searchObj = querystring.parse(urlObj.search);
+        queryObj = querystring.parse(urlObj.query);
     console.log(`${method} ${pathname}`);
     if (method === 'GET') {
         if (pathname === '/mobile/feedback/api/myproblems') {
-            fs.readFile(path.join(__dirname, './public/data/problems.json'), 'utf-8', (err, data) => {
+            fs.readFile(path.join(__dirname, './public/data/probs.json'), 'utf-8', (err, data) => {
                 if (err) throw err;
                 let myproblems = JSON.parse(data);
                 res.writeHead(200, {
                     'Content-Type': mime.lookup('.json')
                 });
-                res.end(JSON.stringify(myproblems[searchObj.uid]));
+                res.end(JSON.stringify(myproblems[queryObj.uid]));
             });
         } else if (pathname === '/mobile/feedback/api/problemdetail') {
-            fs.readFile(path.join(__dirname, './public/data/answers.json'), 'utf-8', (err, data) => {
+            fs.readFile(path.join(__dirname, './public/data/answs.json'), 'utf-8', (err, data) => {
                 if (err) throw err;
                 let answers = JSON.parse(data);
                 res.writeHead(200, {
                     'Content-Type': mime.lookup('.json')
                 });
-                res.end(JSON.stringify(answers[searchObj.feedbackid]));
+                res.end(JSON.stringify(answers[queryObj.feedbackid]));
             });
         }
     } else if (method === 'POST') {
